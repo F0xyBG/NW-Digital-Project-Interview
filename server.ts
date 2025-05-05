@@ -2,6 +2,7 @@ import * as restify from 'restify';
 import { Server as SocketIOServer, Socket } from 'socket.io'; 
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
+import db from './Database/db-functions';
 
 dotenv.config();
 
@@ -16,6 +17,20 @@ const io = new SocketIOServer(server.server, {
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
+// Create a Get endpoint to fetch all chats
+server.get('/api/chats', (req, res, next) => {
+  try {
+    const chats = db.getAllChats(); // Fetch all chats from the database
+    res.send(chats); // Send the chats as a response
+    return next();
+  } catch (error) {
+    console.error('Error fetching chats:', error);
+    res.send(500, { error: 'Internal Server Error' });
+    return next(error);
+  }
+}
+);
+
 // Defining custom event types
 interface ServerToClientEvents {
   chatResponse: (message: string) => void;
@@ -29,9 +44,9 @@ interface ClientToServerEvents {
 // Use the custom types for the socket
 io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
   console.log('A user connected:', socket.id);
+  const conversationID: number | bigint = db.createConversation(); 
 
   socket.on('chatMessage', async (data) => {
-    console.log('Received message:', data);
 
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
@@ -42,17 +57,16 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
         model: 'gpt-3.5-turbo',
         messages: data.messages as OpenAI.Chat.ChatCompletionMessage[]
       });
+    
 
+    db.createChatResponse(
+      data.messages[0].content, // user_prompt
+      response.choices[0].message.content ?? 'No response', // bot_answer
+      data.messages[0].role, // flow_step_taken
+      Number(conversationID) // conversation_id
+    );
 
-    // TODO: Data to log later:
-    // data.messages.content
-    // &&
-    // response.choices[0].message.content
-
-
-      console.log('AI Response:', response);
       const content = response.choices[0].message.content ?? 'No response';
-      console.log('Content:', response.choices[0].message);
       socket.emit('chatResponse', content); 
 
     } catch (error) {

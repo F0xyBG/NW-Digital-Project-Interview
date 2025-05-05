@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 
-const db = new Database('flow_chats.db', { verbose: console.log });
+const db = new Database('flow_chats.db');
 
 // Enable foreign key constraints
 db.exec('PRAGMA foreign_keys = ON;');

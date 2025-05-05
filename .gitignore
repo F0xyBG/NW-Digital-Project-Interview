@@ -18,3 +18,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# database file
+flow_chats.db

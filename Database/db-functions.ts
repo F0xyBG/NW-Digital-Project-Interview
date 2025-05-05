@@ -6,12 +6,20 @@ const dbFunctions = {
         return stmt.run().lastInsertRowid;
     },
 
-    createFlow: (jsonFlow: string) => {
-        const stmt = db.prepare('INSERT INTO Flow (Json_flow) VALUES (?)');
-        return stmt.run(jsonFlow).lastInsertRowid;
+    createUpdateFlow: (jsonFlow: string) => {
+        const deleteStmt = db.prepare('DELETE FROM Flow');
+        const insertStmt = db.prepare('INSERT INTO Flow (Json_flow) VALUES (?)');
+
+        const existingFlow = db.prepare('SELECT COUNT(*) AS count FROM Flow').get() as { count: number };
+
+        if (existingFlow.count > 0) {
+            deleteStmt.run();
+        }
+
+        return insertStmt.run(jsonFlow).lastInsertRowid;
     },
 
-    createChat: (userPrompt: string, botAnswer: string, flowStepTaken: string, conversationId: number) => {
+    createChatResponse: (userPrompt: string, botAnswer: string, flowStepTaken: string, conversationId: number) => {
         const stmt = db.prepare(`
             INSERT INTO Chat (user_prompt, bot_answer, flow_step_taken, conversation_id)
             VALUES (?, ?, ?, ?)
@@ -35,5 +43,5 @@ const dbFunctions = {
     }
 };
 
-
 export default dbFunctions;
+
