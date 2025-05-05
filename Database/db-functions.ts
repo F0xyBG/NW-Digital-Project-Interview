@@ -32,8 +32,8 @@ const dbFunctions = {
         return stmt.all();
     },
 
-    getAllFlows: () => {
-        const stmt = db.prepare('SELECT * FROM Flow');
+    getFlow: () => {
+        const stmt = db.prepare('SELECT Json_flow FROM Flow');
         return stmt.all();
     },
 

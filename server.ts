@@ -1,35 +1,66 @@
 import * as restify from 'restify';
-import { Server as SocketIOServer, Socket } from 'socket.io'; 
+import { Server as SocketIOServer, Socket } from 'socket.io';
 import OpenAI from 'openai';
 import dotenv from 'dotenv';
 import db from './Database/db-functions';
+import corsMiddleware from 'restify-cors-middleware';
 
 dotenv.config();
 
 const server = restify.createServer();
+
+const cors = corsMiddleware({
+  origins: ['http://127.0.0.1:8080'],
+  allowHeaders: ['Authorization', 'Content-Type'], 
+  exposeHeaders: ['Authorization']
+});
+
+server.pre(cors.preflight);
+server.use(cors.actual);
+
 const io = new SocketIOServer(server.server, {
   cors: {
-    origin: "http://127.0.0.1:8080", 
-    methods: ["GET", "POST"], 
+    origin: "http://127.0.0.1:8080",
+    methods: ["GET", "POST"],
   },
 });
 
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-// Create a Get endpoint to fetch all chats
-server.get('/api/chats', (req, res, next) => {
+// Get endpoint to fetch the current flow
+server.get('/api/getFlow', (req, res, next) => {
   try {
-    const chats = db.getAllChats(); // Fetch all chats from the database
-    res.send(chats); // Send the chats as a response
+    const flow = db.getFlow();
+    res.send(200,  flow );
     return next();
   } catch (error) {
-    console.error('Error fetching chats:', error);
+    console.error('Error fetching flows:', error);
     res.send(500, { error: 'Internal Server Error' });
     return next(error);
   }
-}
-);
+});
+
+// Post endpoint to create/update the flow
+server.post('/api/createFlow', (req, res, next) => {
+  const { jsonFlow } = req.body;
+
+  if (!jsonFlow) {
+    res.send(400, { error: 'Invalid JSON flow' });
+    return next();
+  }
+
+  try {
+    const flowId = db.createUpdateFlow(String(jsonFlow));
+    console.log('Flow created/updated with ID:', flowId);
+    res.send(200, { flowId });
+    return next();
+  } catch (error) {
+    console.error('Error creating/updating flow:', error);
+    res.send(500, { error: 'Internal Server Error' });
+    return next(error);
+  }
+});
 
 // Defining custom event types
 interface ServerToClientEvents {
