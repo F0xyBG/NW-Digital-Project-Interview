@@ -10,16 +10,54 @@ body {
     color: #d1d5db;
 }
 
-#chat-container {
-    width: 600px;
-    height: 80vh;
+#main-container {
+    display: flex;
+    width: 90%;
+    height: 90vh;
     background-color: #353535;
     border-radius: 8px;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    margin: 20px auto;
+}
+
+#dashboard {
+    width: 30%;
+    padding: 20px;
+    background-color: #2b2b2b;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #565869;
+}
+
+#json-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #565656;
+    color: #fff;
+    outline: none;
+    resize: none;
+}
+
+#send-json-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #23735f;
+    color: white;
+    cursor: pointer;
+}
+
+#send-json-button:hover {
+    background-color: #2f8d75;
+}
+
+#chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #messages {
