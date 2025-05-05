@@ -43,6 +43,13 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
         messages: data.messages as OpenAI.Chat.ChatCompletionMessage[]
       });
 
+
+     // TODO: Data to log later:
+     // data.messages.content
+     // &&
+      // response.choices[0].message.content
+
+
       console.log('AI Response:', response);
       const content = response.choices[0].message.content ?? 'No response';
       console.log('Content:', response.choices[0].message);
