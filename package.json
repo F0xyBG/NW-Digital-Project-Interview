@@ -9,12 +9,14 @@
   "author": "Simeon Teremkov",
   "license": "ISC",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.15.3",
     "@types/restify": "^8.5.12",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "better-sqlite3": "^11.9.1",
     "dotenv": "^16.5.0",
     "http-server": "^14.1.1",
     "openai": "^4.96.2",

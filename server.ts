@@ -44,16 +44,17 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
       });
 
 
-     // TODO: Data to log later:
-     // data.messages.content
-     // &&
-      // response.choices[0].message.content
+    // TODO: Data to log later:
+    // data.messages.content
+    // &&
+    // response.choices[0].message.content
 
 
       console.log('AI Response:', response);
       const content = response.choices[0].message.content ?? 'No response';
       console.log('Content:', response.choices[0].message);
       socket.emit('chatResponse', content); 
+
     } catch (error) {
       console.error('Error:', error);
       socket.emit('error', { error: 'Internal Server Error' });
