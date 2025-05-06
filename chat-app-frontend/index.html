@@ -1,26 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChatGPT Clone</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <div id="main-container">
-        <div id="dashboard">
-            <textarea id="json-input" placeholder="Enter JSON flow here..."></textarea>
-            <button id="send-json-button">Create/update JSON Flow</button>
+      <div id="dashboard">
+        <textarea
+          id="json-input"
+          placeholder="Enter JSON flow here..."
+        ></textarea>
+        <button id="send-json-button">Create/update JSON Flow</button>
+      </div>
+      <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+          <input id="input-field" type="text" placeholder="Send a message..." />
+          <button id="send-button">Send</button>
         </div>
-        <div id="chat-container">
-            <div id="messages"></div>
-            <div id="input-container">
-                <input id="input-field" type="text" placeholder="Send a message...">
-                <button id="send-button">Send</button>
-            </div>
-        </div>
+      </div>
     </div>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="js/app.js"></script>
-</body>
+  </body>
 </html>

@@ -13,6 +13,10 @@
     "@types/node": "^22.15.3",
     "@types/restify": "^8.5.12",
     "@types/restify-cors-middleware": "^1.0.5",
+    "@typescript-eslint/parser": "^8.32.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.5.3",
+    "prettier-eslint": "^16.4.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
@@ -25,5 +29,26 @@
     "restify-cors-middleware": "^1.1.1",
     "socket.io": "^4.8.1"
   },
-  "type": "module"
+  "type": "module",
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "rules": {}
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 80
+  }
 }
