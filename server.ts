@@ -1,7 +1,7 @@
 import * as restify from 'restify';
 import { Server as SocketIOServer } from 'socket.io';
-import corsMiddleware from 'restify-cors-middleware';
 import { config } from './src/config/config';
+import corsMiddleware from 'restify-cors-middleware2';
 import { registerFlowRoutes } from './src/routes/flow.routes';
 import { setupSocketHandlers } from './src/websocket/chat.handler';
 
@@ -11,14 +11,14 @@ const server = restify.createServer({
   version: '1.0.0',
 });
 
-// Configure CORS
+// Middleware for CORS
 const cors = corsMiddleware({
   origins: config.server.corsOrigins,
   allowHeaders: ['Authorization', 'Content-Type'],
   exposeHeaders: ['Authorization'],
 });
 
-// Apply middleware
+// Set up middleware
 server.pre(cors.preflight);
 server.use(cors.actual);
 server.use(restify.plugins.queryParser());

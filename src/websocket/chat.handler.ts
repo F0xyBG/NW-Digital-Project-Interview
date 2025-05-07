@@ -1,6 +1,11 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import db from '../../Database/DBFunctions';
-import { ClientToServerEvents, Flow, ServerToClientEvents, UserSession } from '../types';
+import {
+  ClientToServerEvents,
+  Flow,
+  ServerToClientEvents,
+  UserSession,
+} from '../types';
 import { flowService } from '../services/flow.service';
 
 // Store the current block for each user session
@@ -19,6 +24,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
       socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
+
         // Clean up the user's session from the server memory
         delete userSessions[socket.id];
       });
@@ -26,15 +32,17 @@ export function setupSocketHandlers(io: SocketIOServer) {
   );
 }
 
-async function handleNewConnection(socket: Socket<ClientToServerEvents, ServerToClientEvents>) {
+async function handleNewConnection(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>
+) {
   const conversationID = db.createConversation();
-  
+
   // Store the conversation ID in the user session
   socket.data.conversationID = conversationID;
 
   // Fetch and initialize the flow
   const flow = await flowService.getFlow();
-  
+
   if (!flow) {
     socket.emit('error', { error: 'No valid flow found in the database' });
     return;
@@ -50,8 +58,12 @@ async function initializeUserSession(
 ) {
   // Find the starting block
   const startBlock = flowService.findBlock(flow, flow.startBlock);
-  
-  if (!startBlock || startBlock.type !== 'message' || typeof startBlock.message !== 'string') {
+
+  if (
+    !startBlock ||
+    startBlock.type !== 'message' ||
+    typeof startBlock.message !== 'string'
+  ) {
     socket.emit('error', { error: 'Invalid start block structure' });
     return;
   }
@@ -62,12 +74,15 @@ async function initializeUserSession(
   // Find the next block after start (typically a wait block)
   if (startBlock.next) {
     const waitBlock = flowService.findBlock(flow, startBlock.next);
-    
+
     if (waitBlock && waitBlock.next) {
+      
       // Set the next block as the current block in the user session
       userSessions[socket.id] = { currentBlockId: waitBlock.next };
     } else {
-      socket.emit('error', { error: 'Invalid flow structure after start block' });
+      socket.emit('error', {
+        error: 'Invalid flow structure after start block',
+      });
     }
   }
 }
@@ -77,7 +92,7 @@ async function handleChatMessage(
   data: { messages: { role: string; content: string }[] }
 ) {
   const conversationID = socket.data.conversationID;
-  
+
   // Get the user's current block
   const session = userSessions[socket.id];
   if (!session || !session.currentBlockId) {
@@ -93,7 +108,13 @@ async function handleChatMessage(
   }
 
   // Process blocks until we reach a wait block or end of flow
-  await processFlowBlocks(socket, flow, session, data.messages[0]?.content || '', conversationID);
+  await processFlowBlocks(
+    socket,
+    flow,
+    session,
+    data.messages[0]?.content || '',
+    conversationID
+  );
 }
 
 async function processFlowBlocks(
@@ -104,10 +125,10 @@ async function processFlowBlocks(
   conversationID: number | bigint
 ) {
   let currentBlockId = session.currentBlockId;
-  
+
   while (currentBlockId) {
     const currentBlock = flowService.findBlock(flow, currentBlockId);
-    
+
     if (!currentBlock) {
       socket.emit('error', { error: `Block not found: ${currentBlockId}` });
       return;
@@ -119,19 +140,19 @@ async function processFlowBlocks(
       switch (currentBlock.type) {
         case 'message':
           result = await flowService.processMessageBlock(
-            currentBlock, 
-            socket, 
-            socket.id, 
+            currentBlock,
+            socket,
+            socket.id,
             userSessions
           );
           break;
-          
+
         case 'wait':
           result = await flowService.processWaitBlock(currentBlock);
           // For wait blocks, we stop processing here
           userSessions[socket.id].currentBlockId = result.nextBlockId;
           return;
-          
+
         case 'intent':
           result = await flowService.processIntentBlock(
             currentBlock,
@@ -141,7 +162,7 @@ async function processFlowBlocks(
             socket
           );
           break;
-          
+
         default:
           socket.emit('error', { error: 'Unknown block type' });
           return;
@@ -150,7 +171,6 @@ async function processFlowBlocks(
       // Update the session with the next block ID
       currentBlockId = result.nextBlockId;
       userSessions[socket.id].currentBlockId = currentBlockId;
-      
     } catch (error) {
       console.error('Error processing flow block:', error);
       socket.emit('error', { error: 'Error processing flow' });

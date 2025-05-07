@@ -9,7 +9,9 @@ if (!process.env.OPENAI_API_KEY) {
 export const config = {
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 7070,
-    corsOrigins: process.env.CORS_ORIGINS?.split(',') || ['http://127.0.0.1:8080'],
+    corsOrigins: process.env.CORS_ORIGINS?.split(',') || [
+      'http://127.0.0.1:8080',
+    ],
   },
   openai: {
     apiKey: process.env.OPENAI_API_KEY || '',

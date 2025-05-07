@@ -3,6 +3,7 @@ import { flowService } from '../services/flow.service';
 import db from '../../Database/DBFunctions';
 
 export function registerFlowRoutes(server: restify.Server) {
+  
   // Get endpoint to fetch the current flow
   server.get('/api/getFlow', async (req, res) => {
     try {
@@ -28,7 +29,8 @@ export function registerFlowRoutes(server: restify.Server) {
       console.log('Flow created/updated with ID:', flowId);
       res.send(200, { flowId });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Internal Server Error';
       console.error('Error creating/updating flow:', error);
       res.send(500, { error: errorMessage });
     }

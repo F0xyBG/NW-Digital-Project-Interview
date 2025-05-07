@@ -11,7 +11,10 @@ export class OpenAIService {
     });
   }
 
-  async detectIntent(systemPrompt: string, userMessage: string): Promise<string> {
+  async detectIntent(
+    systemPrompt: string,
+    userMessage: string
+  ): Promise<string> {
     const messages: ChatMessage[] = [
       { role: 'system', content: systemPrompt },
       { role: 'user', content: userMessage },
