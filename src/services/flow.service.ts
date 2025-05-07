@@ -86,6 +86,13 @@ export class FlowService {
     const matchedIntent = this.findMatchingIntent(block.intents, userMessage);
 
     if (matchedIntent) {
+      // Save chat response to database
+      db.createChatResponse(
+        userMessage,
+        matchedIntent.name,
+        block.id,
+        Number(conversationID)
+      );
       return { nextBlockId: matchedIntent.next };
     }
 
