@@ -1,6 +1,6 @@
-import db from '../../Database/DBFunctions';
+import db from '../../Database/DBFunctions.js';
 import { Flow, FlowBlock, Intent } from '../types';
-import { openAIService } from './openai.service';
+import { openAIService } from './openai.service.js';
 
 export class FlowService {
   async getFlow(): Promise<Flow | null> {

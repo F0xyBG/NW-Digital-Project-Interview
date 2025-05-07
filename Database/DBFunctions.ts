@@ -1,4 +1,4 @@
-import db from './Database';
+import db from './Database.js';
 
 const dbFunctions = {
   createConversation: () => {

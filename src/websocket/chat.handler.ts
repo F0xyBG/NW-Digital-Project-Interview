@@ -1,12 +1,12 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
-import db from '../../Database/DBFunctions';
+import db from '../../Database/DBFunctions.js';
 import {
   ClientToServerEvents,
   Flow,
   ServerToClientEvents,
   UserSession,
 } from '../types';
-import { flowService } from '../services/flow.service';
+import { flowService } from '../services/flow.service.js';
 
 // Store the current block for each user session
 const userSessions: Record<string, UserSession> = {};

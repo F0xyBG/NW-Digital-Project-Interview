@@ -1,9 +1,9 @@
 import * as restify from 'restify';
 import { Server as SocketIOServer } from 'socket.io';
-import { config } from './src/config/config';
+import { config } from './src/config/config.js';
 import corsMiddleware from 'restify-cors-middleware2';
-import { registerFlowRoutes } from './src/routes/flow.routes';
-import { setupSocketHandlers } from './src/websocket/chat.handler';
+import { registerFlowRoutes } from './src/routes/flow.routes.js';
+import { setupSocketHandlers } from './src/websocket/chat.handler.js';
 
 // Create the server
 const server = restify.createServer({

@@ -6,8 +6,11 @@ const sendButton = document.getElementById('send-button');
 const jsonInput = document.getElementById('json-input');
 const sendJsonButton = document.getElementById('send-json-button');
 
+// Set the API base URL based on the current hostname
+const apiBaseUrl = window.location.hostname + ':7070';
+
 // Load the current flow from the server when the page loads
-fetch('http://localhost:7070/api/getFlow')
+fetch(`http://${apiBaseUrl}/api/getFlow`)
   .then((response) => {
     if (!response.ok) {
       throw new Error('Failed to fetch the current flow');
@@ -27,7 +30,7 @@ fetch('http://localhost:7070/api/getFlow')
   });
 
 // Connect to the WebSocket server
-const socket = io('http://localhost:7070');
+const socket = io(window.location.hostname + ':7070');
 
 // Listen for the 'chatResponse' event from the server
 socket.on('chatResponse', (message) => {
@@ -68,7 +71,7 @@ function sendJsonFlow() {
     return;
   }
 
-  fetch('http://localhost:7070/api/createFlow', {
+  fetch(`http://${apiBaseUrl}/api/createFlow`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
