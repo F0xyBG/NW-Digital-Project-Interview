@@ -116,20 +116,48 @@ fetch('http://localhost:7070/api/createFlow', {
 
 ```
 Test Project Job/
-├── chat-app-frontend/
+├── chat-app-frontend/         # Frontend application
 │   ├── css/
 │   │   └── styles.css       # Frontend styles
 │   ├── js/
-│   │   └── app.js           # Frontend logic
-│   └── index.html           # Frontend HTML
-├── Database/
-│   ├── Database.ts          # SQLite database setup
-│   └── DBFunctions.ts       # Database helper functions
-├── .gitignore               # Ignored files and folders
-├── package.json             # Project dependencies and scripts
-├── server.ts                # Backend server logic
-├── tsconfig.json            # TypeScript configuration
-└── flow_chats.db            # SQLite database file (ignored by Git, created automatically by the server)
+│   │   └── app.js             # Frontend logic
+│   └── index.html             # Frontend HTML
+├── Database/                  # Database related code
+│   ├── Database.ts            # SQLite database setup
+│   └── DBFunctions.ts         # Database helper functions
+├── src/                       # Backend source code
+│   ├── config/                # Configuration files
+│   │   └── config.ts          # App configuration
+│   ├── routes/                # API routes
+│   │   └── flow.routes.ts     # Flow management routes
+│   ├── services/              # Business logic services
+│   │   ├── flow.service.ts    # Flow processing service
+│   │   └── openai.service.ts  # OpenAI integration service
+│   ├── types/                 # TypeScript type definitions
+│   │   └── index.ts           # Type definitions for the app
+│   └── websocket/             # WebSocket handlers
+│       └── chat.handler.ts    # Chat socket handler
+├── tests/                     # Test files
+│   ├── Database/              # Database tests
+│   │   └── DBFunctions.test.ts # Database functions tests
+│   ├── src/                   # Backend tests
+│   │   ├── config/            # Config tests
+│   │   │   └── config.test.ts # Configuration tests
+│   │   ├── routes/            # Routes tests
+│   │   │   └── flow.routes.test.ts # Flow routes tests
+│   │   ├── services/          # Service tests
+│   │   │   ├── flow.service.test.ts # Flow service tests
+│   │   │   └── openai.service.test.ts # OpenAI service tests
+│   │   └── websocket/         # WebSocket tests
+│   │       └── chat.handler.test.ts # Chat handler tests
+│   └── server.test.ts         # Server tests
+├── .env                       # Environment variables(ignored by Git)
+├── .gitignore                 # Git ignore configuration
+├── jest.config.ts             # Jest testing configuration
+├── package.json               # Project dependencies and scripts
+├── server.ts                  # Backend server entry point
+├── tsconfig.json              # TypeScript configuration
+└── flow_chats.db              # SQLite database file (ignored by Git, created automatically)
 ```
 
 ---
@@ -161,6 +189,12 @@ Test Project Job/
    ```
    OPENAI_API_KEY=your_openai_api_key
    ```
+- Optional settings in env (default values[shown below] loaded if not set)
+   ```bash
+   PORT=7070  
+   CORS_ORIGINS=http://127.0.0.1:8080
+   OPENAI_MODEL=gpt-4.1-nano
+   ```
 
 4. Compile TypeScript:
 
@@ -180,6 +214,32 @@ Test Project Job/
      npx http-server chat-app-frontend
      ```
    - Open `http://127.0.0.1:8080` in your browser.
+
+---
+
+## Testing
+
+The project includes a comprehensive test suite using Jest. The tests cover database functions, services, routes, and WebSocket handlers.
+
+### Running Tests
+
+To run all tests:
+
+```bash
+npm test
+```
+
+To run tests with coverage report:
+
+```bash
+npm run test:coverage
+```
+
+### Test Structure
+
+- **Unit Tests**: Tests for individual components like services and database functions
+- **Integration Tests**: Tests for routes and WebSocket handlers
+- **Configuration Tests**: Tests for the application configuration
 
 ---
 
@@ -271,21 +331,52 @@ The chatbot uses a flow-based system defined in JSON. This is a minimal valid ex
 
 - **Start Server**:
   ```bash
+  npm run dev
+  ```
+- **Run TypeScript Compiler to build**:
+  ```bash
+  npm build
+  ```
+- **Run build of server**:
+  ```bash
   npm start
   ```
-- **Run TypeScript Compiler**:
+- **Run Tests**:
   ```bash
-  npx tsc
+  npm test
+  ```
+- **Run Tests with Coverage**:
+  ```bash
+  npm run test:coverage
   ```
 
 ---
 
-## Future Improvements
+## Dependencies
 
-- Add unit tests for backend logic.
-- Using Docker for setup
+### Backend
+
+- `better-sqlite3`: SQLite database integration
+- `dotenv`: Environment variable management
+- `restify`: REST API framework
+- `socket.io`: WebSocket communication
+- `openai`: OpenAI API client
+- `restify-cors-middleware2`: CORS middleware for Restify
+
+### Frontend
+
+- `http-server`: Server to host the frontend
+
+### Development
+
+- `jest`: Testing framework
+- `ts-jest`: TypeScript support for Jest
+- `typescript`: TypeScript compiler
+- `eslint`: Linting tool
+- `prettier`: Code formatter
 
 ---
+
 
 ## Author
 

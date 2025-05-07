@@ -2,10 +2,13 @@
   "name": "test-project-job",
   "version": "1.0.0",
   "description": "A project extension of my job interview at NW Digital",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "dev": "tsx watch ./server.ts",
+    "build": "tsc",
+    "start": "node prod/server.js"
   },
   "author": "Simeon Teremkov",
   "license": "ISC",
