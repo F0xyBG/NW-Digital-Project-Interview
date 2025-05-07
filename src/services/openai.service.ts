@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { config } from '../config/config';
+import { config } from '../config/config.js';
 import { ChatMessage } from '../types';
 
 export class OpenAIService {

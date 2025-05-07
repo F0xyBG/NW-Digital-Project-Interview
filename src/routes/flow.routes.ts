@@ -1,6 +1,6 @@
 import * as restify from 'restify';
-import { flowService } from '../services/flow.service';
-import db from '../../Database/DBFunctions';
+import { flowService } from '../services/flow.service.js';
+import db from '../../Database/DBFunctions.js';
 
 export function registerFlowRoutes(server: restify.Server) {
   

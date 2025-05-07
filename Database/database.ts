@@ -1,6 +1,15 @@
 import Database from 'better-sqlite3';
+import { existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
 
-const db = new Database('flow_chats.db');
+// Create data directory if it doesn't exist
+const dataDir = './data';
+if (!existsSync(dataDir)) {
+  mkdirSync(dataDir, { recursive: true });
+}
+
+const dbPath = join(dataDir, 'flow_chats.db');
+const db = new Database(dbPath);
 
 // Enable foreign key constraints
 db.exec('PRAGMA foreign_keys = ON;');

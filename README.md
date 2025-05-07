@@ -118,7 +118,7 @@ fetch('http://localhost:7070/api/createFlow', {
 Test Project Job/
 ├── chat-app-frontend/         # Frontend application
 │   ├── css/
-│   │   └── styles.css       # Frontend styles
+│   │   └── styles.css         # Frontend styles
 │   ├── js/
 │   │   └── app.js             # Frontend logic
 │   └── index.html             # Frontend HTML
@@ -138,82 +138,43 @@ Test Project Job/
 │   └── websocket/             # WebSocket handlers
 │       └── chat.handler.ts    # Chat socket handler
 ├── tests/                     # Test files
-│   ├── Database/              # Database tests
-│   │   └── DBFunctions.test.ts # Database functions tests
-│   ├── src/                   # Backend tests
-│   │   ├── config/            # Config tests
-│   │   │   └── config.test.ts # Configuration tests
-│   │   ├── routes/            # Routes tests
-│   │   │   └── flow.routes.test.ts # Flow routes tests
-│   │   ├── services/          # Service tests
-│   │   │   ├── flow.service.test.ts # Flow service tests
-│   │   │   └── openai.service.test.ts # OpenAI service tests
-│   │   └── websocket/         # WebSocket tests
-│   │       └── chat.handler.test.ts # Chat handler tests
-│   └── server.test.ts         # Server tests
-├── .env                       # Environment variables(ignored by Git)
-├── .gitignore                 # Git ignore configuration
-├── jest.config.ts             # Jest testing configuration
+├── .dockerignore              # Files to exclude from Docker builds
+├── .env                       # Environment variables (ignored by Git)
+├── data/                      # Persistent data storage for Docker
+│   └── flow_chats.db          # SQLite database file (created automatically)
+├── Dockerfile                 # Backend Docker configuration
+├── Dockerfile.frontend        # Frontend Docker configuration
+├── docker-compose.yml         # Docker Compose configuration
 ├── package.json               # Project dependencies and scripts
 ├── server.ts                  # Backend server entry point
-├── tsconfig.json              # TypeScript configuration
-└── flow_chats.db              # SQLite database file (ignored by Git, created automatically)
+└── tsconfig.json              # TypeScript configuration
 ```
 
 ---
 
-## Installation
+## Installation and usage
 
-### Prerequisites
-
-- Node.js (v16+ recommended)
-- TypeScript
-
-### Steps
+### Docker Setup 
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/F0xyBG/NW-Digital-Project-Interview.git
    cd Test-Project-Job
    ```
 
-2. Install dependencies:
+2. Create a .env file in the root directory and add your OpenAI API key:
+    ```bash
+    OPENAI_API_KEY=your_openai_api_key
+    OPENAI_MODEL=gpt-4.1-nano
+    ```
 
-   ```bash
-   npm install
-   ```
+3. Build and start the containers:
+    ```bash
+      docker-compose up --build
+    ```
 
-3. Create a `.env` file in the root directory and add your OpenAI API key:
+The backend server will be available at http://localhost:7070 and the frontend at http://localhost:8080. Go to the frontend to interact with the application.
 
-   ```
-   OPENAI_API_KEY=your_openai_api_key
-   ```
-- Optional settings in env (default values[shown below] loaded if not set)
-   ```bash
-   PORT=7070  
-   CORS_ORIGINS=http://127.0.0.1:8080
-   OPENAI_MODEL=gpt-4.1-nano
-   ```
-
-4. Compile TypeScript:
-
-   ```bash
-   npx tsc
-   ```
-
-5. Start the server:
-
-   ```bash
-   node server.js
-   ```
-
-6. Open the frontend:
-   - Serve the `chat-app-frontend` folder using a static server like `http-server`:
-     ```bash
-     npx http-server chat-app-frontend
-     ```
-   - Open `http://127.0.0.1:8080` in your browser.
 
 ---
 
@@ -245,9 +206,12 @@ npm run test:coverage
 
 ## Usage
 
-1. **Start the Server**:
+1. **Start the Application**:
 
-   - The backend server runs on `http://localhost:7070`.
+```bash
+docker-compose up-build
+```
+   - The frontend runs on `http://localhost:8080`.
 
 2. **Manage JSON Flow**:
 
